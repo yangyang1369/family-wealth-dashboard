@@ -291,6 +291,51 @@ document.querySelectorAll('.statusbar .tab').forEach(t=>{
   t.addEventListener('click',()=>switchTab(t.dataset.tab));
 });
 
+/* ========== 自动数据加载（signals.json，GitHub Actions 定时生成） ========== */
+let autoSig = null;      // 自动抓取的数据
+let autoUpdated = null;  // 数据时间戳
+function loadAutoSignals(){
+  fetch('signals.json')
+    .then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+    .then(data=>{
+      autoSig = data;
+      autoUpdated = data.updated || null;
+      applyAutoSignals();
+      updateTop();
+    })
+    .catch(e=>{
+      console.log('自动数据加载失败（手动模式）:', e.message);
+    });
+}
+function applyAutoSignals(){
+  if(!autoSig || !autoSig.signals) return;
+  const s = autoSig.signals;
+  // 仅在手动未设置时用自动数据，手动优先
+  if(sig.nas===undefined && s.ndx_drawdown_pct!==undefined) sig.nas = s.ndx_drawdown_pct;
+  if(sig.div===undefined && s.csi300_div!==undefined) sig.div = s.csi300_div;
+  if(sig.gb===undefined && s.equity_bond_spread!==undefined) sig.gb = s.equity_bond_spread;
+  if(sig.pb===undefined){
+    // 港股科技用恒生科技涨跌做参考信号（非PB分位，仅参考）
+    if(autoSig.quotes && autoSig.quotes.hkHSTECH){
+      sig.hk_pct = autoSig.quotes.hkHSTECH.pct;
+      // 用近5日累计涨跌估算（简化：pct<-3 视为回调可关注）
+      const hk = autoSig.quotes.hkHSTECH.pct;
+      sig.pb = (hk<=-3)? 15 : (hk<=0 ? 35 : 60); // 估算分位
+    }
+  }
+  renderSignals();
+  renderAutoStatus();
+}
+function renderAutoStatus(){
+  // 在信号面板上方显示"数据更新时间 + 来源"
+  const tip = $('sig-tip');
+  if(tip && autoUpdated){
+    tip.innerHTML = '💡 <b>数据自动更新于：'+autoUpdated+'</b>（来自定时任务）。' +
+      '纳指回撤 / 沪深300股息率 / 股债性价比已自动填充，港股分位为估算参考。' +
+      '手动填数会覆盖自动值。看到 <span style="color:var(--green)">"该加仓"</span> 就行动。';
+  }
+}
+
 /* ========== 便宜信号 ========== */
 function renderSignals(){
   if(!sig.nas && !sig.div && !sig.pb && !sig.gb){ return; }
@@ -311,9 +356,11 @@ function renderSignals(){
     else if(sig.div>=3.0){st.textContent='不错，正常投';st.className='status st-watch';}
     else{st.textContent='股息率偏低，不追';st.className='status st-hold';}
   }
-  // PB分位
+  // PB分位（或港股参考）
   if(sig.pb!==undefined){
-    $('sig-pb').textContent=sig.pb.toFixed(0)+'%分位';
+    // 如果是自动估算（来自恒生科技涨跌），显示估算标签
+    const isEstimate = sig.hk_pct!==undefined;
+    $('sig-pb').textContent = sig.pb.toFixed(0)+'%分位'+(isEstimate?' (估)':'');
     const st=$('st-pb');
     if(sig.pb<=20){st.textContent='📈 该加仓港股科技 2万';st.className='status st-action';}
     else if(sig.pb<=40){st.textContent='合理，正常投';st.className='status st-watch';}
@@ -492,6 +539,7 @@ backfillPositions();
 renderSignals();
 renderCheck();
 updateTop();
+loadAutoSignals();  // 异步加载自动数据（不阻塞页面）
 </script>
 </body>
 </html>

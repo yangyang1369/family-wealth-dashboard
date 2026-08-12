@@ -1,0 +1,47 @@
+name: 自动更新便宜信号
+
+# 触发条件：
+# 1. 每天定时（工作日 + 周末都跑，周末数据不更新也无妨）
+# 2. 手动触发（Actions 页面点 Run workflow）
+on:
+  schedule:
+    - cron: '30 1 * * *'   # 每天 UTC 01:30 = 北京时间 09:30（A股开盘）
+    - cron: '30 7 * * *'   # 每天 UTC 07:30 = 北京时间 15:30（收盘后更新）
+  workflow_dispatch:       # 允许手动触发
+
+permissions:
+  contents: write          # 允许推送更新到仓库
+
+jobs:
+  fetch-signals:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 安装依赖
+        run: |
+          pip install akshare pandas requests
+
+      - name: 运行抓取脚本
+        run: python fetch_signals.py
+        continue-on-error: false
+
+      - name: 提交更新
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add signals.json
+          # 只有文件变化才提交，避免空提交触发循环
+          if git diff --cached --quiet; then
+            echo "signals.json 无变化，跳过提交"
+          else
+            git commit -m "自动更新便宜信号 $(date '+%Y-%m-%d %H:%M')"
+            git push
+            echo "✅ 已推送 signals.json"
+          fi
