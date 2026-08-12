@@ -208,8 +208,12 @@
   <!-- ============ Tab: 持仓偏离 ============ -->
   <section id="tab-positions" class="hidden">
     <div class="card">
-      <h2>📊 持仓偏离度（手动填市值，自动判断）</h2>
-      <div class="tip">每周末花 2 分钟填各账户市值。偏离目标 <span style="color:var(--red)">±20%</span> 标红 → 触发再平衡。</div>
+      <h2>📊 持仓偏离度（填市值 → 自动判断再平衡）</h2>
+      <div class="tip">
+        💡 便宜信号已自动更新，<b>持仓市值需你手动填</b>（银行 App 接口不开放，安全考虑不做自动同步）。
+        点击下方「一键预填当前持仓」可填入基准值（含确定持仓），<b>各定投市值请以 App 实际为准微调</b>。
+        填完点「计算偏离度」，偏离目标 <span style="color:var(--red)">±20%</span> 标红 → 触发再平衡。
+      </div>
       <div style="margin-top:12px" class="grid grid2">
         <div>
           <div class="input-row"><label>纳指100</label><input type="number" id="pos-nas" placeholder="万元"><span class="unit">万</span></div>
@@ -226,8 +230,11 @@
           <div class="input-row"><label>现金(多宝)</label><input type="number" id="pos-cash" placeholder="万元"><span class="unit">万</span></div>
         </div>
       </div>
-      <button class="btn" onclick="applyPositions()">计算偏离度</button>
-      <button class="btn btn-ghost" onclick="saveSnapshot()" style="margin-left:8px">保存本月快照</button>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" onclick="applyPositions()">计算偏离度</button>
+        <button class="btn btn-ghost" onclick="saveSnapshot()" style="margin-left:8px">保存本月快照</button>
+        <button class="btn btn-ghost" onclick="prefillPositions()">一键预填当前持仓</button>
+      </div>
 
       <div id="pos-result" style="margin-top:16px"></div>
     </div>
@@ -461,6 +468,24 @@ function applyPositions(){
   }
   localStorage.setItem('cfo_positions', JSON.stringify(pos));
   renderPositions();
+}
+// 一键预填当前持仓基准值（确定持仓 + 定投估算，以App实际为准）
+function prefillPositions(){
+  const presets = {
+    'pos-nas': 2.2,   // 纳指100（建信APP，估算）
+    'pos-sp': 2.2,    // 标普500（华夏APP，估算）
+    'pos-hk': 1.0,    // 港股科技（估算）
+    'pos-div': 2.0,   // 红利低波（估算）
+    'pos-csi': 1.0,   // 沪深300（估算）
+    'pos-val': 0.4,   // 300价值（估算）
+    'pos-a50': 0.4,   // 中证A50（估算）
+    'pos-gold': 1.0,  // 黄金（估算）
+    'pos-bond': 50,   // 纯债：交银38 + 周周12 = 确定
+    'pos-cash': 9.8   // 现金：多宝 = 确定
+  };
+  for(const id in presets){ $(id).value = presets[id]; }
+  applyPositions();
+  alert('已预填基准持仓。\n\n确定值：纯债50万 + 现金9.8万 ✓\n定投各账户为估算值（建仓初期），请按 App 实际市值微调后重新计算。\n\n⚠️ 这只是基准，请务必核实！');
 }
 function saveSnapshot(){
   const cur=getPositions();
