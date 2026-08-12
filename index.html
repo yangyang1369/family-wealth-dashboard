@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>家庭财富驾驶舱</title>
+<style>
+  :root{
+    --bg:#0f172a; --card:#1e293b; --card2:#16213e; --line:#334155;
+    --txt:#e2e8f0; --mut:#94a3b8; --brand:#38bdf8;
+    --green:#34d399; --yellow:#fbbf24; --red:#f87171;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--txt);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+    padding:16px; line-height:1.5;
+  }
+  .wrap{max-width:1100px;margin:0 auto}
+  h1{font-size:22px;display:flex;align-items:center;gap:10px;margin-bottom:4px}
+  h1 .dot{width:10px;height:10px;border-radius:50%;background:var(--brand);box-shadow:0 0 12px var(--brand)}
+  .sub{color:var(--mut);font-size:13px;margin-bottom:18px}
+  .last-update{color:var(--mut);font-size:12px;margin-top:6px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px}
+  .card h2{font-size:15px;color:var(--brand);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+  .grid{display:grid;gap:12px}
+  .grid4{grid-template-columns:repeat(4,1fr)}
+  .grid3{grid-template-columns:repeat(3,1fr)}
+  .grid2{grid-template-columns:repeat(2,1fr)}
+  @media(max-width:820px){.grid4,.grid3,.grid2{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:520px){.grid4,.grid3,.grid2{grid-template-columns:1fr}}
+
+  /* 信号卡片 */
+  .signal{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:14px}
+  .signal .name{font-size:13px;color:var(--mut);margin-bottom:6px}
+  .signal .val{font-size:20px;font-weight:700}
+  .signal .threshold{font-size:11px;color:var(--mut);margin-top:4px}
+  .signal .status{font-size:12px;margin-top:8px;padding:4px 8px;border-radius:6px;display:inline-block;font-weight:600}
+  .st-action{background:rgba(52,211,153,.15);color:var(--green)}
+  .st-watch{background:rgba(251,191,36,.15);color:var(--yellow)}
+  .st-hold{background:rgba(148,163,184,.15);color:var(--mut)}
+  .st-danger{background:rgba(248,113,113,.15);color:var(--red)}
+
+  /* 输入 */
+  .input-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+  .input-row label{width:90px;font-size:13px;color:var(--mut);flex-shrink:0}
+  .input-row input{flex:1;background:var(--card2);border:1px solid var(--line);border-radius:8px;color:var(--txt);padding:8px 10px;font-size:14px;min-width:0}
+  .input-row input:focus{outline:none;border-color:var(--brand)}
+  .input-row .unit{color:var(--mut);font-size:12px}
+
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{padding:8px 10px;text-align:right;border-bottom:1px solid var(--line)}
+  th{color:var(--mut);font-weight:600;font-size:12px}
+  td:first-child,th:first-child{text-align:left}
+  tr:hover td{background:rgba(56,189,248,.04)}
+  .pos{color:var(--green);font-weight:600}
+  .neg{color:var(--red);font-weight:600}
+  .dev-low{color:var(--green)}
+  .dev-mid{color:var(--yellow)}
+  .dev-high{color:var(--red);font-weight:700}
+  .tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600}
+
+  /* 再平衡提示 */
+  .rb-msg{padding:10px 14px;border-radius:10px;margin-top:10px;font-size:13px;font-weight:600}
+  .rb-ok{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);color:var(--green)}
+  .rb-warn{background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.3);color:var(--yellow)}
+  .rb-act{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);color:var(--red)}
+
+  /* 按钮 */
+  .btn{background:var(--brand);color:#0f172a;border:none;padding:9px 18px;border-radius:9px;font-weight:700;font-size:14px;cursor:pointer}
+  .btn:hover{opacity:.9}
+  .btn-ghost{background:transparent;border:1px solid var(--line);color:var(--txt)}
+  .btn-ghost:hover{border-color:var(--brand)}
+
+  /* 决策清单 */
+  .checklist{list-style:none}
+  .checklist li{padding:8px 12px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;font-size:13px;display:flex;gap:10px;align-items:flex-start}
+  .checklist .q{font-weight:600;flex-shrink:0}
+  .checklist .a{color:var(--mut)}
+  .asset-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+  .asset-tab{padding:7px 14px;border-radius:20px;border:1px solid var(--line);background:var(--card2);color:var(--txt);cursor:pointer;font-size:13px;font-weight:600}
+  .asset-tab.active{background:var(--brand);color:#0f172a;border-color:var(--brand)}
+  .hidden{display:none}
+  .tip{background:rgba(56,189,248,.08);border-left:3px solid var(--brand);padding:10px 14px;border-radius:0 8px 8px 0;font-size:13px;color:var(--mut);margin-top:12px}
+  .kv{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}
+  .kv:last-child{border:none}
+  .kv .k{color:var(--mut)}
+  .kv .v{font-weight:700}
+  .big-num{font-size:30px;font-weight:800;color:var(--brand)}
+  .num-row{display:flex;gap:20px;flex-wrap:wrap;margin-top:6px}
+  .num-box{flex:1;min-width:140px;background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:12px}
+  .num-box .label{font-size:11px;color:var(--mut)}
+  .num-box .value{font-size:22px;font-weight:700;margin-top:4px}
+  .statusbar{position:sticky;top:0;background:rgba(15,23,42,.95);backdrop-filter:blur(8px);padding:10px 0;z-index:10;border-bottom:1px solid var(--line);margin-bottom:16px}
+  .statusbar .inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+  .statusbar .total{font-weight:800}
+  .statusbar .tabs{display:flex;gap:6px}
+  .statusbar .tab{padding:6px 14px;border-radius:18px;border:1px solid var(--line);background:var(--card2);color:var(--txt);cursor:pointer;font-size:13px;font-weight:600}
+  .statusbar .tab.active{background:var(--brand);color:#0f172a;border-color:var(--brand)}
+  .reset{color:var(--mut);font-size:12px;text-decoration:underline;cursor:pointer}
+  .reset:hover{color:var(--red)}
+  footer{color:var(--mut);font-size:11px;text-align:center;padding:20px 0 10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- 顶部导航 -->
+  <div class="statusbar">
+    <div class="inner">
+      <div><span class="total" id="topTotal">总资产：--</span> <span class="total" style="color:var(--mut);font-size:13px" id="topInv">可投：--</span></div>
+      <div class="tabs">
+        <span class="tab active" data-tab="signals">📡 便宜信号</span>
+        <span class="tab" data-tab="positions">📊 持仓偏离</span>
+        <span class="tab" data-tab="check">✅ 决策清单</span>
+        <span class="tab" data-tab="summary">🎯 驾驶舱</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Tab: 驾驶舱 概览 ============ -->
+  <section id="tab-summary">
+    <div class="card">
+      <h2>🎯 家庭资产概览</h2>
+      <div class="num-row">
+        <div class="num-box"><div class="label">总资产（实时）</div><div class="value" id="sTotal">--</div></div>
+        <div class="num-box"><div class="label">月定投合计</div><div class="value" style="font-size:16px">约 1.6 万<br><span style="font-size:11px;color:var(--mut)">11月后 → 2万+</span></div></div>
+        <div class="num-box"><div class="label">目标加权年化</div><div class="value" style="font-size:16px">5.7% → 9.2%<br><span style="font-size:11px;color:var(--mut)">进阶路线</span></div></div>
+        <div class="num-box"><div class="label">存量迁移节奏</div><div class="value" style="font-size:16px">5400→1万/月<br><span style="font-size:11px;color:var(--mut)">大跌时 3-5万</span></div></div>
+      </div>
+
+      <div class="grid grid2" style="margin-top:16px">
+        <div>
+          <h2 style="margin-bottom:8px">📌 关键提醒</h2>
+          <div class="kv"><span class="k">本月定投执行</span><span class="v" id="sum-sip">--</span></div>
+          <div class="kv"><span class="k">存量迁移（交银赎出）</span><span class="v" id="sum-mig">--</span></div>
+          <div class="kv"><span class="k">标普500 限额</span><span class="v" id="sum-sp500">--</span></div>
+          <div class="kv"><span class="k">纳斯达克定投</span><span class="v" id="sum-nas">--</span></div>
+          <div class="kv"><span class="k">消费贷进度</span><span class="v" id="sum-loan">--</span></div>
+          <div class="kv"><span class="k">老公转款</span><span class="v" id="sum-hus">--</span></div>
+        </div>
+        <div>
+          <h2 style="margin-bottom:8px">🗓 我的时间预算</h2>
+          <div class="kv"><span class="k">每周（5分钟）</span><span class="v" style="font-size:12px;color:var(--mut)">便宜信号 + 定投检查</span></div>
+          <div class="kv"><span class="k">每月（1小时）</span><span class="v" style="font-size:12px;color:var(--mut)">估值表 + 股债性价比</span></div>
+          <div class="kv"><span class="k">每季（2小时）</span><span class="v" style="font-size:12px;color:var(--mut)">偏离度 + 因子风格</span></div>
+          <div class="kv"><span class="k">每年1月</span><span class="v" style="font-size:12px;color:var(--mut)">再平衡 + 目标复核</span></div>
+          <div class="kv"><span class="k">当前阶段</span><span class="v" style="font-size:12px;color:var(--yellow)">进阶①：加速迁移</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🛠 月度操作清单（每月 1 小时）</h2>
+      <ul class="checklist">
+        <li><span class="q">□</span><span>打开螺丝钉估值表，标记 <span style="color:var(--green)">低估</span>/<span style="color:var(--yellow)">正常</span>/<span style="color:var(--red)">高估</span>（低估多买，高估暂停）</span></li>
+        <li><span class="q">□</span><span>看股债性价比（且慢APP→市场温度计）：&gt;2%加速迁移，&lt;0.5%停买</span></li>
+        <li><span class="q">□</span><span>决定存量迁移金额：日常 1万 / 触发信号 3-5万 / 正常 5400</span></li>
+        <li><span class="q">□</span><span>给老公发月度 Review（如果他愿意看的话）</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ Tab: 便宜信号 ============ -->
+  <section id="tab-signals" class="hidden">
+    <div class="card">
+      <h2>📡 四个便宜信号（核心买入时机）</h2>
+      <div class="grid grid4">
+        <div class="signal">
+          <div class="name">纳指 100 回撤</div>
+          <div class="val" id="sig-nas">--</div>
+          <div class="threshold">从近期高点跌 &gt;15% → 加仓</div>
+          <div class="status" id="st-nas">等待输入</div>
+        </div>
+        <div class="signal">
+          <div class="name">沪深300 股息率</div>
+          <div class="val" id="sig-div">--</div>
+          <div class="threshold">&gt;3.5% → 加仓红利</div>
+          <div class="status" id="st-div">等待输入</div>
+        </div>
+        <div class="signal">
+          <div class="name">港股科技 PB 分位</div>
+          <div class="val" id="sig-pb">--</div>
+          <div class="threshold">&lt;20% 历史分位 → 加仓</div>
+          <div class="status" id="st-pb">等待输入</div>
+        </div>
+        <div class="signal">
+          <div class="name">股债性价比</div>
+          <div class="val" id="sig-gb">--</div>
+          <div class="threshold">&gt;2% 超配权益 / &lt;0.5% 停买</div>
+          <div class="status" id="st-gb">等待输入</div>
+        </div>
+      </div>
+      <div class="tip" id="sig-tip">💡 每周花 5 分钟更新上面四个数。看到 <span style="color:var(--green)">"该加仓"</span> 就行动，否则什么都不用做。数据来源：雪球/且慢/中证指数官网。</div>
+    </div>
+
+    <div class="card">
+      <h2>🔢 手动输入便宜信号数值</h2>
+      <div class="input-row"><label>纳指回撤 %</label><input type="number" id="in-nas" placeholder="如 18 = 跌了18%"><span class="unit">（0~100，负数表示下跌幅度）</span></div>
+      <div class="input-row"><label>沪深300股息率</label><input type="number" step="0.01" id="in-div" placeholder="如 3.2"><span class="unit">%</span></div>
+      <div class="input-row"><label>港股PB分位</label><input type="number" id="in-pb" placeholder="如 15 = 处于15%分位"><span class="unit">%（0~100）</span></div>
+      <div class="input-row"><label>股债性价比</label><input type="number" step="0.01" id="in-gb" placeholder="如 1.8"><span class="unit">%</span></div>
+      <button class="btn" onclick="applySignals()">保存并判断</button>
+      <span class="reset" onclick="clearSignals()" style="margin-left:14px">清空</span>
+    </div>
+  </section>
+
+  <!-- ============ Tab: 持仓偏离 ============ -->
+  <section id="tab-positions" class="hidden">
+    <div class="card">
+      <h2>📊 持仓偏离度（手动填市值，自动判断）</h2>
+      <div class="tip">每周末花 2 分钟填各账户市值。偏离目标 <span style="color:var(--red)">±20%</span> 标红 → 触发再平衡。</div>
+      <div style="margin-top:12px" class="grid grid2">
+        <div>
+          <div class="input-row"><label>纳指100</label><input type="number" id="pos-nas" placeholder="万元"><span class="unit">万</span></div>
+          <div class="input-row"><label>标普500</label><input type="number" id="pos-sp" placeholder="万元"><span class="unit">万</span></div>
+          <div class="input-row"><label>港股科技</label><input type="number" id="pos-hk" placeholder="万元"><span class="unit">万</span></div>
+          <div class="input-row"><label>红利低波</label><input type="number" id="pos-div" placeholder="万元"><span class="unit">万</span></div>
+          <div class="input-row"><label>沪深300</label><input type="number" id="pos-csi" placeholder="万元"><span class="unit">万</span></div>
+        </div>
+        <div>
+          <div class="input-row"><label>300价值</label><input type="number" id="pos-val" placeholder="万元"><span class="unit">万</span></div>
+          <div class="input-row"><label>中证A50</label><input type="number" id="pos-a50" placeholder="万元"><span class="unit">万</span></div>
+          <div class="input-row"><label>黄金</label><input type="number" id="pos-gold" placeholder="万元"><span class="unit">万</span></div>
+          <div class="input-row"><label>纯债(交银+周周)</label><input type="number" id="pos-bond" placeholder="万元"><span class="unit">万</span></div>
+          <div class="input-row"><label>现金(多宝)</label><input type="number" id="pos-cash" placeholder="万元"><span class="unit">万</span></div>
+        </div>
+      </div>
+      <button class="btn" onclick="applyPositions()">计算偏离度</button>
+      <button class="btn btn-ghost" onclick="saveSnapshot()" style="margin-left:8px">保存本月快照</button>
+
+      <div id="pos-result" style="margin-top:16px"></div>
+    </div>
+  </section>
+
+  <!-- ============ Tab: 决策清单 ============ -->
+  <section id="tab-check" class="hidden">
+    <div class="card">
+      <h2>✅ 买入决策清单（每笔加仓前过五关）</h2>
+      <div class="asset-tabs" id="assetTabs"></div>
+      <div id="assetPanel"></div>
+    </div>
+  </section>
+
+  <footer>家庭财富驾驶舱 · 数据存本机 · 非投资建议 · 决策自负</footer>
+</div>
+
+<script>
+/* ========== 常量 ========== */
+const ASSETS = {
+  "tech": {name:"美股+港股科技", target:0.35, role:"进攻端·全球科技成长", desc:"全球科技龙头：苹果、微软、英伟达、腾讯、阿里、美团", 
+    lines:["纳指100","标普500","港股科技"], 
+    buy:{y:"当前低估区可多配", n:"核心永远买，估值只决定多少"}, 
+    watch:"长期年化预期 6-12%，波动大但要扛住"},
+  "div": {name:"国内红利", target:0.25, role:"Carry端·下蛋鸡", desc:"A股高分红稳定公司，每年分红自动再投",
+    lines:["红利低波","沪深300","300价值","中证A50"],
+    buy:{y:"股息率>3.5% 是好的下蛋鸡", n:"永远买，分红是现金流的来源"},
+    watch:"长期年化预期 4-9%，核心稳定盘"},
+  "gold": {name:"黄金", target:0.10, role:"对冲·负相关", desc:"经济差/通胀时涨，对冲股票下跌",
+    lines:["国泰黄金"],
+    buy:{y:"可逢低加，对冲价值高", n:"控制比例，不追高"},
+    watch:"长期年化 2-7%，重在保险不在收益"},
+  "bond": {name:"纯债", target:0.25, role:"防御·压舱石", desc:"稳如狗，年化 2.5-3%",
+    lines:["交银稳利","周周享"],
+    buy:{y:"——", n:"存量逐渐迁移，不急着清"},
+    watch:"长期年化 2-3.5%，越跌越说明股票有性价比"},
+  "cash": {name:"流动现金", target:0.05, role:"应急·弹药", desc:"应急 + 大跌抄底弹药",
+    lines:["多宝理财"],
+    buy:{y:"——", n:"保持 3-5% 就好"},
+    watch:"长期年化 1-2%，用于择机加仓"}
+};
+
+/* ========== 状态 ========== */
+let sig = JSON.parse(localStorage.getItem('cfo_signals')||'{}');
+let pos = JSON.parse(localStorage.getItem('cfo_positions')||'{}');
+let snapshot = JSON.parse(localStorage.getItem('cfo_snapshot')||'null');
+let log = JSON.parse(localStorage.getItem('cfo_log')||'[]');
+
+/* ========== 通用 ========== */
+function $(id){return document.getElementById(id)}
+function fmt(v, dec){ if(v===''||v==null||isNaN(v)) return '--'; return Number(v).toFixed(dec==null?1:dec); }
+
+/* ========== Tab 切换 ========== */
+function switchTab(name){
+  document.querySelectorAll('.statusbar .tab').forEach(t=>t.classList.toggle('active', t.dataset.tab===name));
+  ['signals','positions','check','summary'].forEach(id=>{
+    $('tab-'+id).classList.toggle('hidden', id!==name);
+  });
+}
+document.querySelectorAll('.statusbar .tab').forEach(t=>{
+  t.addEventListener('click',()=>switchTab(t.dataset.tab));
+});
+
+/* ========== 便宜信号 ========== */
+function renderSignals(){
+  if(!sig.nas && !sig.div && !sig.pb && !sig.gb){ return; }
+  // 纳指回撤
+  if(sig.nas!==undefined){
+    const v=sig.nas, el=$('sig-nas');
+    el.textContent = v<0 ? '--' : v.toFixed(1)+'%';
+    const st=$('st-nas');
+    if(v>=15){st.textContent='🚀 该加仓 3-5万';st.className='status st-action';}
+    else if(v>=8){st.textContent='👀 关注，接近区间';st.className='status st-watch';}
+    else{st.textContent='保持定投';st.className='status st-hold';}
+  }
+  // 股息率
+  if(sig.div!==undefined){
+    $('sig-div').textContent=sig.div.toFixed(2)+'%';
+    const st=$('st-div');
+    if(sig.div>=3.5){st.textContent='🐔 该加仓红利 2-3万';st.className='status st-action';}
+    else if(sig.div>=3.0){st.textContent='不错，正常投';st.className='status st-watch';}
+    else{st.textContent='股息率偏低，不追';st.className='status st-hold';}
+  }
+  // PB分位
+  if(sig.pb!==undefined){
+    $('sig-pb').textContent=sig.pb.toFixed(0)+'%分位';
+    const st=$('st-pb');
+    if(sig.pb<=20){st.textContent='📈 该加仓港股科技 2万';st.className='status st-action';}
+    else if(sig.pb<=40){st.textContent='合理，正常投';st.className='status st-watch';}
+    else{st.textContent='偏贵，少配';st.className='status st-hold';}
+  }
+  // 股债性价比
+  if(sig.gb!==undefined){
+    $('sig-gb').textContent=sig.gb.toFixed(2)+'%';
+    const st=$('st-gb');
+    if(sig.gb>=2.0){st.textContent='🎯 超配权益，加速迁移';st.className='status st-action';}
+    else if(sig.gb>=0.5){st.textContent='正常区间，维持';st.className='status st-watch';}
+    else{st.textContent='股票偏贵，多留现金';st.className='status st-danger';}
+  }
+}
+function applySignals(){
+  const nas=parseFloat($('in-nas').value), div=parseFloat($('in-div').value),
+        pb=parseFloat($('in-pb').value), gb=parseFloat($('in-gb').value);
+  if(!isNaN(nas)) sig.nas=Math.abs(nas);
+  if(!isNaN(div)) sig.div=div;
+  if(!isNaN(pb)) sig.pb=pb;
+  if(!isNaN(gb)) sig.gb=gb;
+  localStorage.setItem('cfo_signals', JSON.stringify(sig));
+  $('in-nas').value='';$('in-div').value='';$('in-pb').value='';$('in-gb').value='';
+  renderSignals();
+  updateTop();
+}
+function clearSignals(){
+  if(!confirm('清空所有便宜信号数据？')) return;
+  sig={}; localStorage.setItem('cfo_signals','{}');
+  ['sig-nas','sig-div','sig-pb','sig-gb'].forEach(id=>$(id).textContent='--');
+  ['st-nas','st-div','st-pb','st-gb'].forEach(id=>{$(id).textContent='等待输入';$(id).className='status';});
+  updateTop();
+}
+// 回填已存值
+function backfillSignals(){
+  if(sig.nas!==undefined) $('sig-nas').textContent=sig.nas.toFixed(1)+'%';
+  if(sig.div!==undefined) $('sig-div').textContent=sig.div.toFixed(2)+'%';
+  if(sig.pb!==undefined) $('sig-pb').textContent=sig.pb.toFixed(0)+'%分位';
+  if(sig.gb!==undefined) $('sig-gb').textContent=sig.gb.toFixed(2)+'%';
+}
+
+/* ========== 持仓偏离 ========== */
+const POS_MAP = {
+  tech:['pos-nas','pos-sp','pos-hk'], div:['pos-div','pos-csi','pos-val','pos-a50'],
+  gold:['pos-gold'], bond:['pos-bond'], cash:['pos-cash']
+};
+function getPositions(){
+  const res={};
+  for(const k in POS_MAP){
+    res[k]=POS_MAP[k].reduce((s,id)=>{const v=parseFloat($(id).value); return s+(isNaN(v)?0:v);},0);
+  }
+  return res;
+}
+function renderPositions(){
+  const cur=getPositions();
+  const total=Object.values(cur).reduce((a,b)=>a+b,0);
+  if(total===0){ $('pos-result').innerHTML='<div class="tip">填上方市值后点"计算偏离度"。</div>'; return; }
+  let html='<table><thead><tr><th>资产</th><th>目标</th><th>当前</th><th>实际占比</th><th>偏离</th><th>判断</th></tr></thead><tbody>';
+  let rbMsgs=[];
+  for(const k in ASSETS){
+    const a=ASSETS[k];
+    const curv=cur[k], targetV=total*a.target;
+    const pct=curv/total*100;
+    const dev=targetV>0 ? (curv-targetV)/targetV : 0;
+    const devAbs=Math.abs(dev);
+    const devClass=devAbs>0.2?'dev-high':(devAbs>0.1?'dev-mid':'dev-low');
+    let judge='<span class="tag" style="background:rgba(52,211,153,.15);color:var(--green)">正常</span>';
+    if(devAbs>0.2){
+      judge = dev>0
+        ? '<span class="tag" style="background:rgba(248,113,113,.15);color:var(--red)">超配·卖</span>'
+        : '<span class="tag" style="background:rgba(248,113,113,.15);color:var(--red)">低配·买</span>';
+      rbMsgs.push((dev>0?'🔴 超配':'🔵 低配')+`：${a.name} 偏离 ${(dev*100).toFixed(0)}%`);
+    } else if(devAbs>0.1){
+      rbMsgs.push(`🟡 关注：${a.name} 偏离 ${(dev*100).toFixed(0)}%`);
+    }
+    html+=`<tr><td>${a.name}</td><td>${(a.target*100).toFixed(0)}%</td>
+      <td>${curv.toFixed(1)}万</td><td>${pct.toFixed(1)}%</td>
+      <td class="${devClass}">${dev>0?'+':''}${(dev*100).toFixed(0)}%</td><td>${judge}</td></tr>`;
+  }
+  html+=`<tr style="border-top:2px solid var(--line);font-weight:700"><td>合计</td><td>100%</td><td>${total.toFixed(1)}万</td><td>100%</td><td></td><td></td></tr>`;
+  html+='</tbody></table>';
+  if(rbMsgs.length){
+    const act=rbMsgs.filter(m=>m.startsWith('🔴')||m.startsWith('🔵'));
+    const box = act.length? 'rb-act':'rb-warn';
+    const title = act.length? '⚠️ 触发再平衡信号（偏离超20%）：':'🟡 偏离接近阈值，关注：';
+    html+=`<div class="rb-msg ${box}">${title}<br>${rbMsgs.join('<br>')}</div>`;
+  } else {
+    html+=`<div class="rb-msg rb-ok">✅ 各资产都在目标 ±10% 内，无需再平衡。保持定投即可。</div>`;
+  }
+  $('pos-result').innerHTML=html;
+  updateTop();
+}
+function applyPositions(){
+  for(const k in POS_MAP){
+    let v=0;
+    POS_MAP[k].forEach(id=>{const x=parseFloat($(id).value); if(!isNaN(x)) v+=x;});
+    pos[k]=v;
+  }
+  localStorage.setItem('cfo_positions', JSON.stringify(pos));
+  renderPositions();
+}
+function saveSnapshot(){
+  const cur=getPositions();
+  if(Object.values(cur).every(v=>v===0)){ alert('先填持仓市值再保存快照'); return; }
+  const now=new Date().toISOString().slice(0,10);
+  snapshot={date:now, ...cur};
+  localStorage.setItem('cfo_snapshot', JSON.stringify(snapshot));
+  const rec={date:now, ...cur};
+  log.push(rec); localStorage.setItem('cfo_log', JSON.stringify(log.slice(-24)));
+  alert(`已保存 ${now} 快照，共 ${log.length} 条记录`);
+  renderPositions();
+}
+
+/* ========== 决策清单 ========== */
+function renderCheck(){
+  const tabs=$('assetTabs');
+  tabs.innerHTML='';
+  Object.keys(ASSETS).forEach((k,i)=>{
+    const b=document.createElement('span');
+    b.className='asset-tab'+(i===0?' active':'');
+    b.textContent=ASSETS[k].name;
+    b.onclick=()=>{ tabs.querySelectorAll('.asset-tab').forEach(t=>t.classList.remove('active')); b.classList.add('active'); renderPanel(k); };
+    tabs.appendChild(b);
+  });
+  renderPanel(Object.keys(ASSETS)[0]);
+}
+function renderPanel(k){
+  const a=ASSETS[k];
+  $('assetPanel').innerHTML=`
+    <div style="margin-bottom:10px">
+      <div style="font-size:14px;font-weight:700">${a.name} · 目标 ${(a.target*100).toFixed(0)}%</div>
+      <div style="font-size:12px;color:var(--brand)">${a.role}</div>
+      <div style="font-size:13px;color:var(--mut);margin-top:4px">${a.desc}</div>
+      <div style="font-size:12px;color:var(--mut);margin-top:2px">包含：${a.lines.join(' / ')}</div>
+    </div>
+    <ul class="checklist">
+      <li><span class="q">①</span><span class="a">闲钱 3-5 年不用？—— ${k==='cash'||k==='bond'?'是（防守端）':'是（定投）'}</span></li>
+      <li><span class="q">②</span><span class="a">收益来源归类？—— ${a.role.split('·')[1]||'—'}，说得清就买</span></li>
+      <li><span class="q">③</span><span class="a">久期风险？（债看久期，股看波动）—— 已控制</span></li>
+      <li><span class="q">④</span><span class="a">相关性（假分散？）—— 与其他池子负相关/低相关</span></li>
+      <li><span class="q">⑤</span><span class="a">是否最热时想梭哈？—— <b>高估区不追，回调时加</b></span></li>
+    </ul>
+    <div class="tip"><b>买入判断：</b>${a.buy.y!=='——'?a.buy.y:a.buy.n}<br><b>长期预期：</b>${a.watch}</div>
+  `;
+}
+
+/* ========== 顶部 & 驾驶舱 ========== */
+function calcTotal(){
+  const p=getPositions();
+  return Object.values(p).reduce((a,b)=>a+b,0);
+}
+function updateTop(){
+  const total=calcTotal();
+  $('topTotal').textContent = total>0 ? `总资产：${total.toFixed(1)}万` : '总资产：--';
+  const inv=total - (pos.bond||0) - (pos.cash||0);
+  $('topInv').textContent = total>0 ? `可投：${Math.max(0,inv).toFixed(1)}万` : '可投：--';
+  $('sTotal').textContent = total>0 ? total.toFixed(1)+' 万' : '--';
+  // 驾驶舱关键数字
+  $('sum-sip').textContent = '约 1.6 万（11月后2万+）';
+  $('sum-mig').textContent = snapshot? (snapshot.date+' 快照已存') : '待记录（5400→1万/月）';
+  $('sum-sp500').textContent = '100/天 手动';
+  $('sum-nas').textContent = '500/周 自动';
+  $('sum-loan').textContent = '8000/月 · 2026.11 清';
+  $('sum-hus').textContent = '3000/月';
+}
+// 回填持仓输入框
+function backfillPositions(){
+  for(const k in POS_MAP){
+    if(pos[k]){ POS_MAP[k].forEach(id=>$(id).value=pos[k]); }
+  }
+}
+
+/* ========== 初始化 ========== */
+backfillSignals();
+backfillPositions();
+renderSignals();
+renderCheck();
+updateTop();
+</script>
+</body>
+</html>
