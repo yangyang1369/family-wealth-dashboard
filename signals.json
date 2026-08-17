@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-16 08:58:07",
+  "updated": "2026-08-17 04:08:55",
   "signals": {
     "ndx_drawdown": -2.0,
     "ndx_drawdown_pct": 2.0,
@@ -8,8 +8,8 @@
     "csi300_div_action": "hold",
     "csi300_pe": 14.73,
     "csi300_date": "2026-08-14",
-    "hk_price": 4707.62,
-    "hk_pct": -1.77,
+    "hk_price": 4800.62,
+    "hk_pct": 1.98,
     "bond_yield": 1.696,
     "equity_bond_spread": 0.82,
     "spread_action": "watch"
@@ -29,15 +29,15 @@
     },
     "sh000300": {
       "name": "沪深300",
-      "price": 4665.88,
-      "prev": 4663.95,
-      "pct": 0.04
+      "price": 4701.19,
+      "prev": 4665.88,
+      "pct": 0.76
     },
     "hkHSTECH": {
       "name": "恒生科技指数",
-      "price": 4707.62,
-      "prev": 4792.39,
-      "pct": -1.77
+      "price": 4800.62,
+      "prev": 4707.62,
+      "pct": 1.98
     }
   },
   "ak": {
