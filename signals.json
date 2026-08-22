@@ -1,31 +1,31 @@
 {
-  "updated": "2026-08-21 09:20:53",
+  "updated": "2026-08-22 03:57:58",
   "signals": {
-    "ndx_drawdown": -4.72,
-    "ndx_drawdown_pct": 4.72,
+    "ndx_drawdown": -4.41,
+    "ndx_drawdown_pct": 4.41,
     "ndx_action": "hold",
-    "csi300_div": 2.54,
+    "csi300_div": 2.53,
     "csi300_div_action": "hold",
-    "csi300_pe": 14.62,
-    "csi300_date": "2026-08-20",
+    "csi300_pe": 14.68,
+    "csi300_date": "2026-08-21",
     "hk_price": 4766.16,
     "hk_pct": 1.4,
-    "bond_yield": 1.683,
-    "equity_bond_spread": 0.86,
+    "bond_yield": 1.684,
+    "equity_bond_spread": 0.85,
     "spread_action": "watch"
   },
   "quotes": {
     "usNDX": {
       "name": "纳斯达克100",
-      "price": 29213.16,
-      "prev": 29426.02,
-      "pct": -0.72
+      "price": 29308.86,
+      "prev": 29213.16,
+      "pct": 0.33
     },
     "usINX": {
       "name": "标普500",
-      "price": 7641.16,
-      "prev": 7707.98,
-      "pct": -0.87
+      "price": 7674.37,
+      "prev": 7641.16,
+      "pct": 0.43
     },
     "sh000300": {
       "name": "沪深300",
@@ -41,13 +41,13 @@
     }
   },
   "ak": {
-    "cn10y": 1.6832,
-    "csi300_div": 2.54,
-    "csi300_pe": 14.62,
-    "csi300_date": "2026-08-20",
-    "ndx_price": 29213.1641,
+    "cn10y": 1.6839,
+    "csi300_div": 2.53,
+    "csi300_pe": 14.68,
+    "csi300_date": "2026-08-21",
+    "ndx_price": 29308.8594,
     "ndx_high": 30660.6016,
-    "ndx_drawdown": -4.72,
-    "ndx_date": "2026-08-20"
+    "ndx_drawdown": -4.41,
+    "ndx_date": "2026-08-21"
   }
 }
