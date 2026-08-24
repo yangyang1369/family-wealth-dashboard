@@ -1,18 +1,11 @@
 {
-  "updated": "2026-08-23 08:59:19",
+  "updated": "2026-08-24 04:18:27",
   "signals": {
     "ndx_drawdown": -4.41,
     "ndx_drawdown_pct": 4.41,
     "ndx_action": "hold",
-    "csi300_div": 2.53,
-    "csi300_div_action": "hold",
-    "csi300_pe": 14.68,
-    "csi300_date": "2026-08-21",
-    "hk_price": 4766.16,
-    "hk_pct": 1.4,
-    "bond_yield": 1.684,
-    "equity_bond_spread": 0.85,
-    "spread_action": "watch"
+    "hk_price": 4583.74,
+    "hk_pct": -3.83
   },
   "quotes": {
     "usNDX": {
@@ -29,22 +22,20 @@
     },
     "sh000300": {
       "name": "沪深300",
-      "price": 4618.9,
-      "prev": 4592.75,
-      "pct": 0.57
+      "price": 4560.85,
+      "prev": 4618.9,
+      "pct": -1.26
     },
     "hkHSTECH": {
       "name": "恒生科技指数",
-      "price": 4766.16,
-      "prev": 4700.53,
-      "pct": 1.4
+      "price": 4583.74,
+      "prev": 4766.16,
+      "pct": -3.83
     }
   },
   "ak": {
     "cn10y": 1.6839,
-    "csi300_div": 2.53,
-    "csi300_pe": 14.68,
-    "csi300_date": "2026-08-21",
+    "csi300_err": "Remote end closed connection without response",
     "ndx_price": 29308.8594,
     "ndx_high": 30660.6016,
     "ndx_drawdown": -4.41,
