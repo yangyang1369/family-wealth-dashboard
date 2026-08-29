@@ -1,8 +1,8 @@
 {
-  "updated": "2026-08-28 21:48:29",
+  "updated": "2026-08-29 01:37:13",
   "signals": {
-    "ndx_drawdown": -3.32,
-    "ndx_drawdown_pct": 3.32,
+    "ndx_drawdown": -4.0,
+    "ndx_drawdown_pct": 4.0,
     "ndx_action": "hold",
     "csi300_div": 2.52,
     "csi300_div_action": "hold",
@@ -45,9 +45,9 @@
     "csi300_div": 2.52,
     "csi300_pe": 14.75,
     "csi300_date": "2026-08-28",
-    "ndx_price": 29641.5605,
+    "ndx_price": 29433.4277,
     "ndx_high": 30660.6016,
-    "ndx_drawdown": -3.32,
-    "ndx_date": "2026-08-27"
+    "ndx_drawdown": -4.0,
+    "ndx_date": "2026-08-28"
   }
 }
