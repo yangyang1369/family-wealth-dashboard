@@ -1,11 +1,11 @@
 {
-  "updated": "2026-08-30 07:37:00",
+  "updated": "2026-08-31 01:37:26",
   "signals": {
     "ndx_drawdown": -4.0,
     "ndx_drawdown_pct": 4.0,
     "ndx_action": "hold",
-    "hk_price": 4605.15,
-    "hk_pct": -0.33
+    "hk_price": 4585.61,
+    "hk_pct": -0.42
   },
   "quotes": {
     "usNDX": {
@@ -22,15 +22,15 @@
     },
     "sh000300": {
       "name": "沪深300",
-      "price": 4609.18,
-      "prev": 4630.28,
-      "pct": -0.46
+      "price": 4579.48,
+      "prev": 4609.18,
+      "pct": -0.64
     },
     "hkHSTECH": {
       "name": "恒生科技指数",
-      "price": 4605.15,
-      "prev": 4620.29,
-      "pct": -0.33
+      "price": 4585.61,
+      "prev": 4605.15,
+      "pct": -0.42
     }
   },
   "ak": {
