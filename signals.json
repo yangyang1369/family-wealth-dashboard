@@ -1,11 +1,18 @@
 {
-  "updated": "2026-09-05 01:39:53",
+  "updated": "2026-09-05 07:39:19",
   "signals": {
     "ndx_drawdown": -3.64,
     "ndx_drawdown_pct": 3.64,
     "ndx_action": "hold",
+    "csi300_div": 2.58,
+    "csi300_div_action": "hold",
+    "csi300_pe": 14.87,
+    "csi300_date": "2026-09-04",
     "hk_price": 4569.8,
-    "hk_pct": 2.27
+    "hk_pct": 2.27,
+    "bond_yield": 1.68,
+    "equity_bond_spread": 0.9,
+    "spread_action": "watch"
   },
   "quotes": {
     "usNDX": {
@@ -35,7 +42,9 @@
   },
   "ak": {
     "cn10y": 1.6804,
-    "csi300_err": "<urlopen error [Errno 104] Connection reset by peer>",
+    "csi300_div": 2.58,
+    "csi300_pe": 14.87,
+    "csi300_date": "2026-09-04",
     "ndx_price": 29544.1543,
     "ndx_high": 30660.6016,
     "ndx_drawdown": -3.64,
