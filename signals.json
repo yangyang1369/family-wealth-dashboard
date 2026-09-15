@@ -1,15 +1,15 @@
 {
-  "updated": "2026-09-14 14:20:50",
+  "updated": "2026-09-15 06:31:49",
   "signals": {
-    "ndx_drawdown": -4.21,
-    "ndx_drawdown_pct": 4.21,
+    "ndx_drawdown": -5.0,
+    "ndx_drawdown_pct": 5.0,
     "ndx_action": "hold",
     "csi300_div": 2.62,
     "csi300_div_action": "hold",
     "csi300_pe": 14.67,
     "csi300_date": "2026-09-14",
-    "hk_price": 4317.94,
-    "hk_pct": -0.06,
+    "hk_price": 4303.23,
+    "hk_pct": -0.34,
     "bond_yield": 1.689,
     "equity_bond_spread": 0.93,
     "spread_action": "watch"
@@ -17,27 +17,27 @@
   "quotes": {
     "usNDX": {
       "name": "纳斯达克100",
-      "price": 29022.58,
+      "price": 29127.16,
       "prev": 29368.44,
-      "pct": -1.18
+      "pct": -0.82
     },
     "usINX": {
       "name": "标普500",
-      "price": 7610.0,
+      "price": 7619.98,
       "prev": 7656.98,
-      "pct": -0.61
+      "pct": -0.48
     },
     "sh000300": {
       "name": "沪深300",
-      "price": 4480.08,
-      "prev": 4510.16,
-      "pct": -0.67
+      "price": 4452.52,
+      "prev": 4480.08,
+      "pct": -0.62
     },
     "hkHSTECH": {
       "name": "恒生科技指数",
-      "price": 4317.94,
-      "prev": 4320.57,
-      "pct": -0.06
+      "price": 4303.23,
+      "prev": 4317.94,
+      "pct": -0.34
     }
   },
   "ak": {
@@ -45,9 +45,9 @@
     "csi300_div": 2.62,
     "csi300_pe": 14.67,
     "csi300_date": "2026-09-14",
-    "ndx_price": 29368.4395,
+    "ndx_price": 29127.1582,
     "ndx_high": 30660.6016,
-    "ndx_drawdown": -4.21,
-    "ndx_date": "2026-09-11"
+    "ndx_drawdown": -5.0,
+    "ndx_date": "2026-09-14"
   }
 }
