@@ -1,8 +1,8 @@
 {
-  "updated": "2026-09-25 12:53:10",
+  "updated": "2026-09-26 06:29:49",
   "signals": {
-    "ndx_drawdown": -0.82,
-    "ndx_drawdown_pct": 0.82,
+    "ndx_drawdown": -0.4,
+    "ndx_drawdown_pct": 0.4,
     "ndx_action": "hold",
     "csi300_div": 2.65,
     "csi300_div_action": "hold",
@@ -17,15 +17,15 @@
   "quotes": {
     "usNDX": {
       "name": "纳斯达克100",
-      "price": 30478.86,
-      "prev": 30470.29,
-      "pct": 0.03
+      "price": 30608.13,
+      "prev": 30478.86,
+      "pct": 0.42
     },
     "usINX": {
       "name": "标普500",
-      "price": 7704.13,
-      "prev": 7706.03,
-      "pct": -0.02
+      "price": 7743.41,
+      "prev": 7704.13,
+      "pct": 0.51
     },
     "sh000300": {
       "name": "沪深300",
@@ -45,9 +45,9 @@
     "csi300_div": 2.65,
     "csi300_pe": 14.49,
     "csi300_date": "2026-09-24",
-    "ndx_price": 30478.8555,
+    "ndx_price": 30608.1348,
     "ndx_high": 30732.3965,
-    "ndx_drawdown": -0.82,
-    "ndx_date": "2026-09-24"
+    "ndx_drawdown": -0.4,
+    "ndx_date": "2026-09-25"
   }
 }
