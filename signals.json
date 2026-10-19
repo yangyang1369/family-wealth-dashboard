@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-18 12:09:12",
+  "updated": "2026-10-19 06:37:56",
   "signals": {
     "ndx_drawdown": -6.52,
     "ndx_drawdown_pct": 6.52,
@@ -29,9 +29,9 @@
     },
     "sh000300": {
       "name": "沪深300",
-      "price": 4170.61,
-      "prev": 4166.01,
-      "pct": 0.11
+      "price": 4183.2,
+      "prev": 4170.61,
+      "pct": 0.3
     },
     "hkHSTECH": {
       "name": "恒生科技指数",
