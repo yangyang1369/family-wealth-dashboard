@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-13 08:36:04",
+  "updated": "2026-11-13 15:36:38",
   "signals": {
     "ndx_drawdown": -9.4,
     "ndx_drawdown_pct": 9.4,
@@ -9,23 +9,20 @@
     "csi300_pe": 13.83,
     "csi300_date": "2026-11-11",
     "hk_price": 3813.19,
-    "hk_pct": -3.02,
-    "bond_yield": 1.603,
-    "equity_bond_spread": 1.43,
-    "spread_action": "watch"
+    "hk_pct": -3.02
   },
   "quotes": {
     "usNDX": {
       "name": "纳斯达克100",
-      "price": 28289.19,
-      "prev": 28374.25,
-      "pct": -0.3
+      "price": 27684.0,
+      "prev": 28289.19,
+      "pct": -2.14
     },
     "usINX": {
       "name": "标普500",
-      "price": 7592.4,
-      "prev": 7619.38,
-      "pct": -0.35
+      "price": 7519.68,
+      "prev": 7592.4,
+      "pct": -0.96
     },
     "sh000300": {
       "name": "沪深300",
@@ -41,7 +38,7 @@
     }
   },
   "ak": {
-    "cn10y": 1.6032,
+    "cn10y_err": "module 'akshare' has no attribute 'bond_zh_us_rate'",
     "csi300_div": 3.03,
     "csi300_pe": 13.83,
     "csi300_date": "2026-11-11",
