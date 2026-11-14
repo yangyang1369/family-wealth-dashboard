@@ -1,9 +1,7 @@
 {
-  "updated": "2026-11-14 07:54:19",
+  "updated": "2026-11-14 14:24:39",
   "signals": {
-    "ndx_drawdown": -10.51,
-    "ndx_drawdown_pct": 10.51,
-    "ndx_action": "watch",
+    "ndx_price": 27943.74,
     "hk_price": 3813.19,
     "hk_pct": -3.02
   },
@@ -34,11 +32,8 @@
     }
   },
   "ak": {
-    "cn10y_err": "module 'akshare' has no attribute 'bond_zh_us_rate'",
-    "csi300_err": "('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))",
-    "ndx_price": 27943.7363,
-    "ndx_high": 31224.4727,
-    "ndx_drawdown": -10.51,
-    "ndx_date": "2026-11-13"
+    "cn10y_err": "bond_zh_us_rate 已在 1.20.41 更名为 bond_zh_us_yield_em，请改用 ak.bond_zh_us_yield_em；参数与返回的列也可能有调整，用 ak.interface_info(\"bond_zh_us_yield_em\") 查看。完整对照见 https://akshare.akfamily.xyz/changelog.html#changelog-rename",
+    "csi300_err": "stock_zh_index_value_csindex 已在 1.20.44 更名为 index_value_csindex，请改用 ak.index_value_csindex；参数与返回的列也可能有调整，用 ak.interface_info(\"index_value_csindex\") 查看。完整对照见 https://akshare.akfamily.xyz/changelog.html#changelog-rename",
+    "ndx_err": "index_us_stock_sina 已在 1.20.45 更名为 index_us_daily_sina，请改用 ak.index_us_daily_sina；参数与返回的列也可能有调整，用 ak.interface_info(\"index_us_daily_sina\") 查看。完整对照见 https://akshare.akfamily.xyz/changelog.html#changelog-rename"
   }
 }
