@@ -1,28 +1,24 @@
 {
-  "updated": "2026-11-13 15:36:38",
+  "updated": "2026-11-14 07:54:19",
   "signals": {
-    "ndx_drawdown": -9.4,
-    "ndx_drawdown_pct": 9.4,
+    "ndx_drawdown": -10.51,
+    "ndx_drawdown_pct": 10.51,
     "ndx_action": "watch",
-    "csi300_div": 3.03,
-    "csi300_div_action": "watch",
-    "csi300_pe": 13.83,
-    "csi300_date": "2026-11-11",
     "hk_price": 3813.19,
     "hk_pct": -3.02
   },
   "quotes": {
     "usNDX": {
       "name": "纳斯达克100",
-      "price": 27684.0,
+      "price": 27943.74,
       "prev": 28289.19,
-      "pct": -2.14
+      "pct": -1.22
     },
     "usINX": {
       "name": "标普500",
-      "price": 7519.68,
+      "price": 7561.67,
       "prev": 7592.4,
-      "pct": -0.96
+      "pct": -0.4
     },
     "sh000300": {
       "name": "沪深300",
@@ -39,12 +35,10 @@
   },
   "ak": {
     "cn10y_err": "module 'akshare' has no attribute 'bond_zh_us_rate'",
-    "csi300_div": 3.03,
-    "csi300_pe": 13.83,
-    "csi300_date": "2026-11-11",
-    "ndx_price": 28289.1875,
+    "csi300_err": "('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))",
+    "ndx_price": 27943.7363,
     "ndx_high": 31224.4727,
-    "ndx_drawdown": -9.4,
-    "ndx_date": "2026-11-12"
+    "ndx_drawdown": -10.51,
+    "ndx_date": "2026-11-13"
   }
 }
